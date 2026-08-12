@@ -172,12 +172,12 @@ header{
   font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;
 }
 .badge-promotor{background:var(--green2);color:var(--green);border:1px solid rgba(5,38,89,.3);}
-.badge-pasivo{background:var(--yellow2);color:var(--yellow);border:1px solid rgba(212,149,42,.3);}
+.badge-pasivo,.badge-neutro{background:var(--yellow2);color:var(--yellow);border:1px solid rgba(212,149,42,.3);}
 .badge-detractor{background:var(--red2);color:var(--red);border:1px solid rgba(139,47,58,.3);}
 .survey-info{flex:1;min-width:0;}
 .survey-tipo{font-size:13px;font-weight:600;margin-bottom:3px;}
 .survey-tipo.promotor{color:var(--green);}
-.survey-tipo.pasivo{color:var(--yellow);}
+.survey-tipo.pasivo,.survey-tipo.neutro{color:var(--yellow);}
 .survey-tipo.detractor{color:var(--red);}
 .survey-meta{display:flex;gap:10px;flex-wrap:wrap;}
 .survey-detail{font-size:11px;color:var(--muted2);display:flex;align-items:center;gap:4px;}
@@ -454,10 +454,6 @@ header{
     <button class="btn-salir" onclick="salir()">← Salir</button>
   </div>
 
-  <!-- Banner Lema -->
-  <div class="lema-banner">
-    Escucha 👂 / Conecta ❤️ / Procesa 🛠️ / Rebate 🛡️ / Beneficio 🎁 / Cierre 🏁
-  </div>
 
   <!-- Cuartil Classification Card -->
   <div class="cuartil-card" id="cuartilCard" style="display:none;">
@@ -759,7 +755,7 @@ function yyyymmddToShortDate(ymd) {
 
 function clasificarNPS(score) {
   if (score >= 9) return 'Promotor';
-  if (score >= 7) return 'Pasivo';
+  if (score >= 7) return 'Neutro';
   return 'Detractor';
 }
 
@@ -894,10 +890,10 @@ async function inicializarDatos() {
         let p = 0, pas = 0, d = 0;
         recs.forEach(r => {
           a.mes.total++;
-          if (r.tipo === 'Promotor') { a.mes.prom++; p++; } else if (r.tipo === 'Pasivo') { a.mes.pas++; pas++; } else { a.mes.det++; d++; }
+          if (r.tipo === 'Promotor') { a.mes.prom++; p++; } else if (r.tipo === 'Neutro' || r.tipo === 'Pasivo') { a.mes.pas++; pas++; } else { a.mes.det++; d++; }
           if (r.esHoy) {
             a.dia.total++;
-            if (r.tipo === 'Promotor') a.dia.prom++; else if (r.tipo === 'Pasivo') a.dia.pas++; else a.dia.det++;
+            if (r.tipo === 'Promotor') a.dia.prom++; else if (r.tipo === 'Neutro' || r.tipo === 'Pasivo') a.dia.pas++; else a.dia.det++;
           }
         });
         const dayTNPS = calcTNPS(p, d, recs.length);
