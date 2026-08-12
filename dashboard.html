@@ -535,7 +535,7 @@ header{
 
   <!-- Analysis Card -->
   <div class="analysis-card">
-    <div class="section-title"><span class="st-dot" style="background:var(--yellow)"></span>Análisis de Objetivos y Metas</div>
+    <div class="section-title"><span class="st-dot" style="background:var(--yellow)"></span>Análisis de Objetivos, Cortes y Tasa de Transferencia (% TX)</div>
     <div class="analysis-grid">
       <div class="analysis-metric">
         <div class="am-icon" style="background:var(--red2);border-color:rgba(139,47,58,.3);">📴</div>
@@ -545,17 +545,24 @@ header{
         </div>
       </div>
       <div class="analysis-metric">
+        <div class="am-icon" style="background:var(--blue2);border-color:rgba(84,131,179,.3);">📢</div>
+        <div class="am-data">
+          <div class="am-value" id="txHoyVal">—</div>
+          <div class="am-label">Tasa Transferencia (% TX) Hoy</div>
+        </div>
+      </div>
+      <div class="analysis-metric">
+        <div class="am-icon" style="background:var(--green2);border-color:rgba(5,38,89,.3);">📈</div>
+        <div class="am-data">
+          <div class="am-value" id="txMesVal">—</div>
+          <div class="am-label">% TX Acum. Mes (Meta: <span class="meta-tx-val">80</span>%)</div>
+        </div>
+      </div>
+      <div class="analysis-metric">
         <div class="am-icon" style="background:var(--blue2);border-color:rgba(84,131,179,.3);">🎯</div>
         <div class="am-data">
           <div class="am-value" id="medianaVal">—</div>
           <div class="am-label">TNPS Mín. Objetivo (Mediana)</div>
-        </div>
-      </div>
-      <div class="analysis-metric">
-        <div class="am-icon" style="background:var(--bg);border-color:var(--border);">📊</div>
-        <div class="am-data">
-          <div class="am-value" id="gapVal">—</div>
-          <div class="am-label">Gap vs Mediana</div>
         </div>
       </div>
       <div class="analysis-metric">
@@ -574,7 +581,7 @@ header{
       </div>
     </div>
     <div class="trend-note" style="margin-top:14px;">
-      💡 <strong>Mediana TNPS:</strong> Calculada con el TNPS de cada día del mes actual. El <strong>Gap</strong> es la diferencia entre tu TNPS de hoy y la mediana. Los <strong>promotores faltantes</strong> son encuestas 9-10 adicionales necesarias para alcanzar la meta.
+      💡 <strong>Fórmula de Transferencia (% TX):</strong> % TX = (Derivadas a Encuesta / (Derivadas + Cortes)) × 100. <strong>Mediana TNPS:</strong> Calculada con el TNPS de cada día del mes actual.
     </div>
   </div>
 </div>
@@ -586,73 +593,73 @@ header{
 const CAMPAIGNS = {
   "PREPAGO - FRONT": {
     nombre: "PREPAGO - FRONT",
-    urlData: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSB_NUeo_8kDuGtfWfJ8t8Anmze7fb7VhzTuo0G1Og8WbYO8chEh6oSp_5zJiefIBdxEiZxe2XFHNYx/pub?gid=0&single=true&output=csv",
-    urlDistribucion: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR7FQtEk51lgEhyWmpE3yTYVUB79x3V30eTWWljiyHjBFC2AwejDuFDzbTwtKUhigxKuXooOTHtt525/pub?gid=0&single=true&output=csv",
-    metaTnps: 83,
-    metaTx: 75
+    urlData: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTCKkPiQkp8rJvOrz95FauJokkkbul0MDod3yNN2PGcYRHwscVIPnoQ8mjIlSsroMqO220K_BOlH4FB/pub?output=csv",
+    urlDistribucion: "https://docs.google.com/spreadsheets/d/e/2PACX-1vTbpxF-5MB_g43RYGdZJIqoFMqgeFmuzNDF3IBWZz6-Pq6y6hqooqU9KtKhnJP_ovIvviXe50XZJzws/pub?output=csv",
+    metaTnps: 82,
+    metaTx: 80
   },
   "POSTPAGO - FRONT": {
     nombre: "POSTPAGO - FRONT",
-    urlData: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSB_NUeo_8kDuGtfWfJ8t8Anmze7fb7VhzTuo0G1Og8WbYO8chEh6oSp_5zJiefIBdxEiZxe2XFHNYx/pub?gid=1337271693&single=true&output=csv",
-    urlDistribucion: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR7FQtEk51lgEhyWmpE3yTYVUB79x3V30eTWWljiyHjBFC2AwejDuFDzbTwtKUhigxKuXooOTHtt525/pub?gid=746617146&single=true&output=csv",
-    metaTnps: 84,
-    metaTx: 75
+    urlData: "PEGAR_URL_DATA_POSTPAGO_FRONT_AQUI",
+    urlDistribucion: "PEGAR_URL_DISTRIBUCION_POSTPAGO_FRONT_AQUI",
+    metaTnps: 82,
+    metaTx: 80
   },
   "FRONT 135": {
     nombre: "FRONT 135",
-    urlData: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSB_NUeo_8kDuGtfWfJ8t8Anmze7fb7VhzTuo0G1Og8WbYO8chEh6oSp_5zJiefIBdxEiZxe2XFHNYx/pub?gid=755030699&single=true&output=csv",
-    urlDistribucion: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR7FQtEk51lgEhyWmpE3yTYVUB79x3V30eTWWljiyHjBFC2AwejDuFDzbTwtKUhigxKuXooOTHtt525/pub?gid=825015464&single=true&output=csv",
-    metaTnps: 86,
-    metaTx: 75
+    urlData: "PEGAR_URL_DATA_FRONT_135_AQUI",
+    urlDistribucion: "PEGAR_URL_DISTRIBUCION_FRONT_135_AQUI",
+    metaTnps: 82,
+    metaTx: 80
   },
   "ADMINISTRATIVO - HFC": {
     nombre: "ADMINISTRATIVO - HFC",
-    urlData: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSB_NUeo_8kDuGtfWfJ8t8Anmze7fb7VhzTuo0G1Og8WbYO8chEh6oSp_5zJiefIBdxEiZxe2XFHNYx/pub?gid=980309885&single=true&output=csv",
-    urlDistribucion: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR7FQtEk51lgEhyWmpE3yTYVUB79x3V30eTWWljiyHjBFC2AwejDuFDzbTwtKUhigxKuXooOTHtt525/pub?gid=1644724621&single=true&output=csv",
-    metaTnps: 83,
+    urlData: "PEGAR_URL_DATA_ADMIN_HFC_AQUI",
+    urlDistribucion: "PEGAR_URL_DISTRIBUCION_ADMIN_HFC_AQUI",
+    metaTnps: 82,
     metaTx: 80
   },
   "ADMINISTRATIVO - TECNICO": {
     nombre: "ADMINISTRATIVO - TÉCNICO",
-    urlData: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSB_NUeo_8kDuGtfWfJ8t8Anmze7fb7VhzTuo0G1Og8WbYO8chEh6oSp_5zJiefIBdxEiZxe2XFHNYx/pub?gid=710130709&single=true&output=csv",
-    urlDistribucion: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR7FQtEk51lgEhyWmpE3yTYVUB79x3V30eTWWljiyHjBFC2AwejDuFDzbTwtKUhigxKuXooOTHtt525/pub?gid=2118673595&single=true&output=csv",
-    metaTnps: 83,
+    urlData: "PEGAR_URL_DATA_ADMIN_TECNICO_AQUI",
+    urlDistribucion: "PEGAR_URL_DISTRIBUCION_ADMIN_TECNICO_AQUI",
+    metaTnps: 82,
     metaTx: 80
   },
   "PREMIUM": {
     nombre: "PREMIUM",
-    urlData: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSB_NUeo_8kDuGtfWfJ8t8Anmze7fb7VhzTuo0G1Og8WbYO8chEh6oSp_5zJiefIBdxEiZxe2XFHNYx/pub?gid=1994438390&single=true&output=csv",
-    urlDistribucion: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR7FQtEk51lgEhyWmpE3yTYVUB79x3V30eTWWljiyHjBFC2AwejDuFDzbTwtKUhigxKuXooOTHtt525/pub?gid=1590118836&single=true&output=csv",
-    metaTnps: 91,
-    metaTx: 82
+    urlData: "PEGAR_URL_DATA_PREMIUM_AQUI",
+    urlDistribucion: "PEGAR_URL_DISTRIBUCION_PREMIUM_AQUI",
+    metaTnps: 82,
+    metaTx: 80
   },
   "FULL CLARO": {
     nombre: "FULL CLARO",
-    urlData: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSB_NUeo_8kDuGtfWfJ8t8Anmze7fb7VhzTuo0G1Og8WbYO8chEh6oSp_5zJiefIBdxEiZxe2XFHNYx/pub?gid=637959806&single=true&output=csv",
-    urlDistribucion: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR7FQtEk51lgEhyWmpE3yTYVUB79x3V30eTWWljiyHjBFC2AwejDuFDzbTwtKUhigxKuXooOTHtt525/pub?gid=1949992848&single=true&output=csv",
-    metaTnps: 91,
-    metaTx: 82
+    urlData: "PEGAR_URL_DATA_FULL_CLARO_AQUI",
+    urlDistribucion: "PEGAR_URL_DISTRIBUCION_FULL_CLARO_AQUI",
+    metaTnps: 82,
+    metaTx: 80
   },
   "DTH": {
     nombre: "DTH",
-    urlData: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSB_NUeo_8kDuGtfWfJ8t8Anmze7fb7VhzTuo0G1Og8WbYO8chEh6oSp_5zJiefIBdxEiZxe2XFHNYx/pub?gid=8172983&single=true&output=csv",
-    urlDistribucion: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR7FQtEk51lgEhyWmpE3yTYVUB79x3V30eTWWljiyHjBFC2AwejDuFDzbTwtKUhigxKuXooOTHtt525/pub?gid=1003147150&single=true&output=csv",
-    metaTnps: 83,
+    urlData: "PEGAR_URL_DATA_DTH_AQUI",
+    urlDistribucion: "PEGAR_URL_DISTRIBUCION_DTH_AQUI",
+    metaTnps: 82,
     metaTx: 80
   },
   "ATMOVIL": {
     nombre: "ATMOVIL",
-    urlData: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSB_NUeo_8kDuGtfWfJ8t8Anmze7fb7VhzTuo0G1Og8WbYO8chEh6oSp_5zJiefIBdxEiZxe2XFHNYx/pub?gid=811954530&single=true&output=csv",
-    urlDistribucion: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR7FQtEk51lgEhyWmpE3yTYVUB79x3V30eTWWljiyHjBFC2AwejDuFDzbTwtKUhigxKuXooOTHtt525/pub?gid=285722375&single=true&output=csv",
-    metaTnps: 84,
-    metaTx: 83
+    urlData: "PEGAR_URL_DATA_ATMOVIL_AQUI",
+    urlDistribucion: "PEGAR_URL_DISTRIBUCION_ATMOVIL_AQUI",
+    metaTnps: 82,
+    metaTx: 80
   },
   "ROAMING": {
-    nombre: "https://docs.google.com/spreadsheets/d/e/2PACX-1vSB_NUeo_8kDuGtfWfJ8t8Anmze7fb7VhzTuo0G1Og8WbYO8chEh6oSp_5zJiefIBdxEiZxe2XFHNYx/pub?gid=2001463176&single=true&output=csv",
+    nombre: "ROAMING",
     urlData: "PEGAR_URL_DATA_ROAMING_AQUI",
-    urlDistribucion: "https://docs.google.com/spreadsheets/d/e/2PACX-1vR7FQtEk51lgEhyWmpE3yTYVUB79x3V30eTWWljiyHjBFC2AwejDuFDzbTwtKUhigxKuXooOTHtt525/pub?gid=1716393602&single=true&output=csv",
-    metaTnps: 94,
-    metaTx: 79
+    urlDistribucion: "PEGAR_URL_DISTRIBUCION_ROAMING_AQUI",
+    metaTnps: 82,
+    metaTx: 80
   }
 };
 
@@ -670,9 +677,11 @@ const COL_FECHA       = "FECHA";
 const COL_HORA_FIN    = "HORA FIN DE LLAMADA";
 const COL_DURACION    = "DURACION";
 const COL_ID_LLAMADA  = "ID DE LLAMADA";
+const COL_DESCRIPCION_TRANSFERENCIA = "DESCRIPCION TRANSFERENCIA";
 const COL_CORTADA_POR = "CORTADA POR";
 
 let AGENTS = {};
+let currentAgent = null;
 let trendChartInstance = null;
 
 function actualizarTextosCampana() {
@@ -684,6 +693,8 @@ function actualizarTextosCampana() {
   if (dashTag) dashTag.textContent = activeCampaign.nombre;
   const metaTnpsEls = document.querySelectorAll('.meta-tnps-val');
   metaTnpsEls.forEach(el => el.textContent = activeCampaign.metaTnps);
+  const metaTxEls = document.querySelectorAll('.meta-tx-val');
+  metaTxEls.forEach(el => el.textContent = activeCampaign.metaTx);
 }
 
 async function cambiarCampana(campaignKey) {
@@ -750,6 +761,19 @@ function calcTNPS(prom, det, total) {
   return ((prom - det) / total) * 100;
 }
 
+function calcTX(derivadas, cortes) {
+  const cd = (derivadas || 0) + (cortes || 0);
+  if (cd === 0) return null;
+  return (derivadas / cd) * 100;
+}
+
+function txColor(v) {
+  if (v === null || v === undefined || isNaN(v)) return 'var(--muted2)';
+  if (v >= activeCampaign.metaTx) return 'var(--green)';
+  if (v >= activeCampaign.metaTx - 10) return 'var(--yellow)';
+  return 'var(--red)';
+}
+
 function calcMediana(arr) {
   if (!arr || arr.length === 0) return null;
   const sorted = arr.filter(v => v !== null && v !== undefined && !isNaN(v)).sort((a, b) => a - b);
@@ -784,11 +808,6 @@ function fetchCSV(url) {
 
 async function inicializarDatos() {
   actualizarTextosCampana();
-  if (!activeCampaign.urlData) {
-    document.getElementById('loginStatus').innerHTML = `⚠️ Configurar URLs en script para <b>${activeCampaign.nombre}</b>.`;
-    document.getElementById('loginStatus').style.color = 'var(--yellow)';
-    return;
-  }
   try {
     const [dataAcumulada, distribucion] = await Promise.all([
       fetchCSV(activeCampaign.urlData),
@@ -801,14 +820,8 @@ async function inicializarDatos() {
         usuario:    codigo,
         nombre:     row[COL_DIST_NOMBRE]?.trim() || '—',
         supervisor: row[COL_DIST_SUPER]?.trim()  || 'Sin asignar',
-        mes: { prom: 0, pas: 0, det: 0, total: 0, tnps: null, atendidas: 0 },
-        dia: { prom: 0, pas: 0, det: 0, total: 0, tnps: null, atendidas: 0, cortesCliente: 0 },
-        last3: [],
-        trend: [],
-        medianaTnps: null,
-        gapMediana: null,
-        promMeta: null,
-        promMediana: null
+        mes: { prom: 0, pas: 0, det: 0, total: 0, tnps: null, atendidas: 0, derivadas: 0, cortes: 0 },
+        dia: { prom: 0, pas: 0, det: 0, total: 0, tnps: null, atendidas: 0, derivadas: 0, cortes: 0, cortesCliente: 0 }
       };
     });
     let maxFechaInt = 0;
@@ -832,7 +845,16 @@ async function inicializarDatos() {
         a.mes.atendidas++;
         if (esHoy) a.dia.atendidas++;
       }
-      const cortadaPor = row[COL_CORTADA_POR]?.trim().toUpperCase();
+      const descTrans = row[COL_DESCRIPCION_TRANSFERENCIA]?.trim() || '';
+      if (/(PeruClaro_Satisfa|SatisfactionSurvey|encuesta)/i.test(descTrans)) {
+        a.mes.derivadas++;
+        if (esHoy) a.dia.derivadas++;
+      }
+      const cortadaPor = row[COL_CORTADA_POR]?.trim().toUpperCase() || '';
+      if (['CLIENTE', 'NO CLIENTE', 'AGENTE'].includes(cortadaPor) || (cortadaPor.length > 0 && cortadaPor !== '-')) {
+        a.mes.cortes++;
+        if (esHoy) a.dia.cortes++;
+      }
       if (esHoy && cortadaPor === 'CLIENTE') a.dia.cortesCliente++;
       const scoreRaw = row[COL_NPS];
       if (!scoreRaw || scoreRaw === '-') return;
@@ -858,28 +880,33 @@ async function inicializarDatos() {
             if (r.tipo === 'Promotor') a.dia.prom++; else if (r.tipo === 'Pasivo') a.dia.pas++; else a.dia.det++;
           }
         });
-        const tnpsDia = calcTNPS(p, d, p + pas + d);
-        if (tnpsDia !== null) dailyTNPSValues.push(tnpsDia);
-        a.trend.push({ fecha: yyyymmddToShortDate(fechaInt), tnps: tnpsDia });
+        const dayTNPS = calcTNPS(p, d, recs.length);
+        if (dayTNPS !== null) dailyTNPSValues.push(dayTNPS);
       });
-      a.mes.tnps = dailyTNPSValues.length > 0 ? dailyTNPSValues.reduce((s, v) => s + v, 0) / dailyTNPSValues.length : null;
+      a.mes.tnps = calcTNPS(a.mes.prom, a.mes.det, a.mes.total);
       a.dia.tnps = calcTNPS(a.dia.prom, a.dia.det, a.dia.total);
       a.medianaTnps = calcMediana(dailyTNPSValues);
       if (a.dia.tnps !== null && a.medianaTnps !== null) a.gapMediana = a.dia.tnps - a.medianaTnps;
       a.promMeta = calcPromFaltantes(a.dia.total, a.dia.prom, a.dia.det, activeCampaign.metaTnps);
       a.promMediana = calcPromFaltantes(a.dia.total, a.dia.prom, a.dia.det, a.medianaTnps);
-      a.last3 = (enc[codigo][maxFechaInt] || []).slice(-3).reverse();
+      a.trend = fechasSorted.map(fInt => {
+        const recs = enc[codigo][fInt];
+        let p = 0, d = 0;
+        recs.forEach(r => { if (r.tipo === 'Promotor') p++; else if (r.tipo === 'Detractor') d++; });
+        return { fecha: yyyymmddToShortDate(fInt), tnps: calcTNPS(p, d, recs.length) };
+      });
+      const todayRecs = enc[codigo][maxFechaInt] || [];
+      a.last3 = todayRecs.slice(-3).reverse();
     });
-    document.getElementById('loginStatus').innerHTML = `✅ Base de datos (${activeCampaign.nombre}) lista.`;
+    document.getElementById('loginStatus').innerHTML = `💡 Todo listo para consultar tus datos.`;
     document.getElementById('loginStatus').style.color = 'var(--green)';
     document.getElementById('userInput').disabled = false;
     document.getElementById('btnBuscar').disabled = false;
-  } catch (e) {
-    document.getElementById('loginStatus').innerHTML = '❌ Error de conexión.';
+  } catch (err) {
+    document.getElementById('loginStatus').innerHTML = `⚠️ Error al conectar: ${err.message}`;
+    document.getElementById('loginStatus').style.color = 'var(--red)';
   }
 }
-
-inicializarDatos();
 
 function tnpsColor(v) {
   if (v === null || isNaN(v)) return 'var(--muted2)';
@@ -888,11 +915,16 @@ function tnpsColor(v) {
 
 function buscar() {
   const raw = document.getElementById('userInput').value.trim().toUpperCase();
-  if (AGENTS[raw]) renderDash(AGENTS[raw]);
-  else document.getElementById('errMsg').style.display = 'block';
+  if (AGENTS[raw]) {
+    currentAgent = AGENTS[raw];
+    renderDash();
+  } else {
+    document.getElementById('errMsg').style.display = 'block';
+  }
 }
 
-function renderDash(a) {
+function renderDash() {
+  const a = currentAgent;
   document.getElementById('dashName').textContent = a.nombre;
   document.getElementById('dashSup').textContent = a.supervisor;
   document.getElementById('dashId').textContent = a.usuario;
@@ -903,7 +935,7 @@ function renderDash(a) {
   document.getElementById('dayD').textContent = a.dia.det;
   document.getElementById('dayN').textContent = a.dia.total;
   document.getElementById('dayAtendidas').textContent = a.dia.atendidas;
-  if(a.dia.total > 0) {
+  if (a.dia.total > 0) {
     document.getElementById('pbDayP').style.width = (a.dia.prom/a.dia.total*100)+'%';
     document.getElementById('pbDayPas').style.width = (a.dia.pas/a.dia.total*100)+'%';
     document.getElementById('pbDayD').style.width = (a.dia.det/a.dia.total*100)+'%';
@@ -915,7 +947,7 @@ function renderDash(a) {
   document.getElementById('mesD').textContent = a.mes.det;
   document.getElementById('mesN').textContent = a.mes.total;
   document.getElementById('mesAtendidas').textContent = a.mes.atendidas;
-  if(a.mes.total > 0) {
+  if (a.mes.total > 0) {
     document.getElementById('pbMesP').style.width = (a.mes.prom/a.mes.total*100)+'%';
     document.getElementById('pbMesPas').style.width = (a.mes.pas/a.mes.total*100)+'%';
     document.getElementById('pbMesD').style.width = (a.mes.det/a.mes.total*100)+'%';
@@ -932,6 +964,20 @@ function renderDash(a) {
   const cont = document.getElementById('surveysContainer');
   cont.innerHTML = a.last3.map(s => `<div class="survey-item"><div class="survey-score-badge ${s.tipo.toLowerCase()}">${s.score}</div><div>${s.tipo}</div></div>`).join('');
   document.getElementById('cortesHoy').textContent = a.dia.cortesCliente;
+  
+  const txHoy = calcTX(a.dia.derivadas, a.dia.cortes);
+  const txMes = calcTX(a.mes.derivadas, a.mes.cortes);
+  const txHoyEl = document.getElementById('txHoyVal');
+  if (txHoyEl) {
+    txHoyEl.textContent = txHoy !== null ? `${txHoy.toFixed(1)}%` : '—';
+    txHoyEl.style.color = txColor(txHoy);
+  }
+  const txMesEl = document.getElementById('txMesVal');
+  if (txMesEl) {
+    txMesEl.textContent = txMes !== null ? `${txMes.toFixed(1)}%` : '—';
+    txMesEl.style.color = txColor(txMes);
+  }
+
   document.getElementById('medianaVal').textContent = a.medianaTnps !== null ? a.medianaTnps.toFixed(2)+'%' : '—';
   document.getElementById('gapVal').textContent = a.gapMediana !== null ? (a.gapMediana >= 0 ? '+' : '') + a.gapMediana.toFixed(2)+'%' : '—';
   document.getElementById('promMetaVal').textContent = a.promMeta === 0 ? '✓' : (a.promMeta ?? '—');
