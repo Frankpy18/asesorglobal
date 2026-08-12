@@ -209,33 +209,33 @@ header{
   display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;
 }
 .analysis-grid{
-  display:grid;grid-template-columns:repeat(6,1fr);gap:14px;
+  display:grid;grid-template-columns:repeat(7,1fr);gap:12px;
 }
 .analysis-metric{
-  display:flex;align-items:center;gap:12px;
-  padding:12px 14px;border-radius:12px;
+  display:flex;align-items:center;gap:10px;
+  padding:12px 12px;border-radius:12px;
   background:var(--card2);border:1px solid var(--border2);
   transition:border-color .2s,transform .15s;
 }
 .analysis-metric:hover{border-color:var(--accent);transform:translateY(-1px);}
 .am-icon{
-  width:40px;height:40px;border-radius:10px;flex-shrink:0;
+  width:36px;height:36px;border-radius:10px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
-  font-size:17px;border:1px solid transparent;
+  font-size:16px;border:1px solid transparent;
 }
 .am-data{flex:1;min-width:0;}
 .am-value{
-  font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;
+  font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;
   line-height:1.1;color:var(--accent);
 }
 .am-label{
   font-size:10px;color:var(--muted2);margin-top:2px;
-  line-height:1.3;letter-spacing:.3px;
+  line-height:1.2;letter-spacing:.2px;
 }
-@media(max-width:960px){
-  .analysis-grid{grid-template-columns:repeat(3,1fr);}
+@media(max-width:1100px){
+  .analysis-grid{grid-template-columns:repeat(4,1fr);}
 }
-@media(max-width:680px){
+@media(max-width:768px){
   .analysis-grid{grid-template-columns:repeat(2,1fr);}
 }
 @media(max-width:420px){
@@ -918,7 +918,7 @@ async function inicializarDatos() {
       const todayRecs = enc[codigo][maxFechaInt] || [];
       a.last3 = todayRecs.slice(-3).reverse();
     });
-    document.getElementById('loginStatus').innerHTML = `💡 Todo listo para consultar tus datos.`;
+    document.getElementById('loginStatus').innerHTML = `✅ Base de datos (${activeCampaign.nombre}) lista.`;
     document.getElementById('loginStatus').style.color = 'var(--green)';
     document.getElementById('userInput').disabled = false;
     document.getElementById('btnBuscar').disabled = false;
@@ -941,14 +941,15 @@ function buscar() {
   if (!raw) return;
   if (AGENTS[raw]) {
     currentAgent = AGENTS[raw];
-    renderDash();
+    renderDash(AGENTS[raw]);
   } else {
     document.getElementById('errMsg').style.display = 'block';
   }
 }
 
-function renderDash() {
-  const a = currentAgent;
+function renderDash(agentObj) {
+  const a = agentObj || currentAgent;
+  if (!a) return;
   document.getElementById('dashName').textContent = a.nombre;
   document.getElementById('dashSup').textContent = a.supervisor;
   document.getElementById('dashId').textContent = a.usuario;
