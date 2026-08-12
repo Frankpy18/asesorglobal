@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acceso al Sistema · Mi TNPS</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --bg: #C1E8FF;
+        --card: #ffffff;
+        --border: #7DA0CA;
+        --accent: #021024;
+        --accent2: #052659;
+        --text: #021024;
+        --muted: #5483B3;
+    }
+    
+    * { 
+        margin: 0; 
+        padding: 0; 
+        box-sizing: border-box; 
+    }
+    
+    body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'DM Sans', sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+    }
+    
+    /* El mismo fondo con destello de tu dashboard */
+    body::before {
+        content: ''; 
+        position: fixed; 
+        inset: 0;
+        background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(2,16,36,0.08), transparent);
+        pointer-events: none; 
+        z-index: 0;
+    }
+    
+    .launcher-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 40px 50px;
+        text-align: center;
+        position: relative;
+        z-index: 10;
+        box-shadow: 0 10px 40px rgba(2,16,36,0.08);
+        max-width: 420px;
+        width: 90%;
+        animation: fadeUp 0.5s ease;
+    }
+    
+    .icon-wrap {
+        width: 72px; 
+        height: 72px; 
+        border-radius: 50%;
+        background: linear-gradient(135deg, rgba(2,16,36,.18), rgba(5,38,89,.06));
+        border: 2px solid rgba(2,16,36,.25);
+        margin: 0 auto 20px; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center;
+        font-size: 32px;
+    }
+    
+    .title {
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+        letter-spacing: 0.5px;
+    }
+    
+    .subtitle {
+        color: var(--muted);
+        font-size: 14px;
+        margin-bottom: 32px;
+        line-height: 1.5;
+    }
+    
+    .btn-launch {
+        width: 100%;
+        padding: 16px;
+        border-radius: 12px;
+        border: none;
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        font-family: 'DM Sans', sans-serif;
+        cursor: pointer;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        background: linear-gradient(135deg, #021024, #052659);
+        box-shadow: 0 4px 12px rgba(2, 16, 36, 0.25);
+    }
+    
+    .btn-launch:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(2, 16, 36, 0.4);
+    }
+    
+    .btn-launch:active {
+        transform: translateY(1px);
+    }
+    
+    .note {
+        font-size: 12px;
+        color: var(--muted);
+        margin-top: 20px;
+        padding: 10px;
+        background: rgba(2,16,36,0.04);
+        border-radius: 8px;
+        border: 1px dashed var(--border);
+    }
+
+    @keyframes fadeUp {
+        from { opacity: 0; transform: translateY(14px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+</head>
+<body>
+
+    <div class="launcher-card">
+        <div class="icon-wrap">🔒</div>
+        <h1 class="title">MI TNPS</h1>
+        <p class="subtitle">Consola de Control de Operaciones y Seguimiento de Liderazgo.</p>
+        
+        <div style="margin-bottom: 24px; text-align: left;">
+            <label for="campaignSelect" style="display: block; font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 8px;">
+                🎯 SELECCIONAR CAMPAÑA:
+            </label>
+            <select id="campaignSelect" style="width: 100%; padding: 12px 14px; border-radius: 10px; border: 1.5px solid var(--border); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600; background: #fff; color: var(--text); outline: none; cursor: pointer; transition: all 0.2s ease;">
+                <option value="">-- Elige tu campaña --</option>
+                <option value="PREPAGO - FRONT">1) PREPAGO - FRONT</option>
+                <option value="POSTPAGO - FRONT">2) POSTPAGO - FRONT</option>
+                <option value="FRONT 135">3) FRONT 135</option>
+                <option value="ADMINISTRATIVO - HFC">4) ADMINISTRATIVO - HFC</option>
+                <option value="ADMINISTRATIVO - TECNICO">5) ADMINISTRATIVO - TÉCNICO</option>
+                <option value="PREMIUM">6) PREMIUM</option>
+                <option value="FULL CLARO">7) FULL CLARO</option>
+                <option value="DTH">8) DTH</option>
+                <option value="ATMOVIL">9) ATMOVIL</option>
+                <option value="ROAMING">10) ROAMING</option>
+            </select>
+        </div>
+        
+        <button class="btn-launch" onclick="abrirSistema()">Iniciar Consola Segura →</button>
+        
+        <div class="note">
+            ⚠️ Si es tu primera vez ingresando, asegúrate de permitir las <b>ventanas emergentes (pop-ups)</b> en la barra de tu navegador.
+        </div>
+    </div>
+
+    <script>
+        function abrirSistema() {
+            const campaignSelect = document.getElementById('campaignSelect');
+            const selectedCampaign = campaignSelect.value;
+            if (!selectedCampaign) {
+                alert('⚠️ Por favor, selecciona a qué campaña perteneces antes de ingresar.');
+                campaignSelect.focus();
+                return;
+            }
+            // Parámetros para forzar la apertura como ventana independiente
+            const opciones = "width=1366,height=768,toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes";
+            
+            // Abre dashboard.html pasando la campaña seleccionada
+            window.open('dashboard.html?campaign=' + encodeURIComponent(selectedCampaign), 'TNPS_Dashboard', opciones);
+        }
+    </script>
+</body>
+</html>
