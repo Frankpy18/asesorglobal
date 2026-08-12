@@ -209,7 +209,7 @@ header{
   display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;
 }
 .analysis-grid{
-  display:grid;grid-template-columns:repeat(5,1fr);gap:14px;
+  display:grid;grid-template-columns:repeat(6,1fr);gap:14px;
 }
 .analysis-metric{
   display:flex;align-items:center;gap:12px;
@@ -473,7 +473,7 @@ header{
   </div>
 
   <!-- Grid Superior: Metricas Dia vs Mes -->
-  <div class="tnps-grid">
+  <div class="tnps-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px;">
     <!-- TNPS Día -->
     <div class="tnps-card day-card">
       <div class="tc-label"><span class="tc-ico">☀️</span>TNPS del Día</div>
@@ -563,6 +563,13 @@ header{
         <div class="am-data">
           <div class="am-value" id="medianaVal">—</div>
           <div class="am-label">TNPS Mín. Objetivo (Mediana)</div>
+        </div>
+      </div>
+      <div class="analysis-metric">
+        <div class="am-icon" style="background:var(--bg);border-color:var(--border);">📊</div>
+        <div class="am-data">
+          <div class="am-value" id="gapVal">—</div>
+          <div class="am-label">Gap vs Mediana</div>
         </div>
       </div>
       <div class="analysis-metric">
@@ -828,7 +835,13 @@ async function inicializarDatos() {
         nombre:     row[COL_DIST_NOMBRE]?.trim() || '—',
         supervisor: row[COL_DIST_SUPER]?.trim()  || 'Sin asignar',
         mes: { prom: 0, pas: 0, det: 0, total: 0, tnps: null, atendidas: 0, derivadas: 0, cortes: 0 },
-        dia: { prom: 0, pas: 0, det: 0, total: 0, tnps: null, atendidas: 0, derivadas: 0, cortes: 0, cortesCliente: 0 }
+        dia: { prom: 0, pas: 0, det: 0, total: 0, tnps: null, atendidas: 0, derivadas: 0, cortes: 0, cortesCliente: 0 },
+        medianaTnps: null,
+        gapMediana: null,
+        promMeta: null,
+        promMediana: null,
+        trend: [],
+        last3: []
       };
     });
     let maxFechaInt = 0;
@@ -924,6 +937,8 @@ function tnpsColor(v) {
 
 function buscar() {
   const raw = document.getElementById('userInput').value.trim().toUpperCase();
+  document.getElementById('errMsg').style.display = 'none';
+  if (!raw) return;
   if (AGENTS[raw]) {
     currentAgent = AGENTS[raw];
     renderDash();
@@ -948,7 +963,10 @@ function renderDash() {
     document.getElementById('pbDayP').style.width = (a.dia.prom/a.dia.total*100)+'%';
     document.getElementById('pbDayPas').style.width = (a.dia.pas/a.dia.total*100)+'%';
     document.getElementById('pbDayD').style.width = (a.dia.det/a.dia.total*100)+'%';
+  } else {
+    ['pbDayP','pbDayPas','pbDayD'].forEach(id => document.getElementById(id).style.width = '0%');
   }
+
   document.getElementById('tnpsMes').textContent = a.mes.tnps !== null ? a.mes.tnps.toFixed(2) : '—';
   document.getElementById('tnpsMes').style.setProperty('--cv', tnpsColor(a.mes.tnps));
   document.getElementById('mesP').textContent = a.mes.prom;
@@ -960,19 +978,41 @@ function renderDash() {
     document.getElementById('pbMesP').style.width = (a.mes.prom/a.mes.total*100)+'%';
     document.getElementById('pbMesPas').style.width = (a.mes.pas/a.mes.total*100)+'%';
     document.getElementById('pbMesD').style.width = (a.mes.det/a.mes.total*100)+'%';
+  } else {
+    ['pbMesP','pbMesPas','pbMesD'].forEach(id => document.getElementById(id).style.width = '0%');
   }
-  if(trendChartInstance) trendChartInstance.destroy();
+
+  if (trendChartInstance) trendChartInstance.destroy();
+  const trendList = a.trend || [];
   trendChartInstance = new Chart(document.getElementById('trendChart').getContext('2d'), {
     type: 'line',
     data: {
-      labels: a.trend.map(t => t.fecha),
-      datasets: [{ label: 'Meta', data: a.trend.map(() => activeCampaign.metaTnps), borderColor: '#8b2f3a', borderDash: [8, 4], fill: false, pointRadius: 0 },
-                 { label: 'TNPS', data: a.trend.map(t => t.tnps), borderColor: '#021024', fill: true, backgroundColor: 'rgba(2,16,36,0.08)' }]
+      labels: trendList.map(t => t.fecha),
+      datasets: [{ label: 'Meta', data: trendList.map(() => activeCampaign.metaTnps), borderColor: '#8b2f3a', borderDash: [8, 4], fill: false, pointRadius: 0 },
+                 { label: 'TNPS', data: trendList.map(t => t.tnps), borderColor: '#021024', fill: true, backgroundColor: 'rgba(2,16,36,0.08)' }]
     }
   });
+
   const cont = document.getElementById('surveysContainer');
-  cont.innerHTML = a.last3.map(s => `<div class="survey-item"><div class="survey-score-badge ${s.tipo.toLowerCase()}">${s.score}</div><div>${s.tipo}</div></div>`).join('');
-  document.getElementById('cortesHoy').textContent = a.dia.cortesCliente;
+  const last3List = a.last3 || [];
+  if (last3List.length > 0) {
+    cont.innerHTML = last3List.map(s => `
+      <div class="survey-item">
+        <div class="survey-score-badge ${s.tipo.toLowerCase()}">${s.score}</div>
+        <div class="survey-info">
+          <div class="survey-tipo ${s.tipo.toLowerCase()}">${s.tipo} (${s.score})</div>
+          <div class="survey-meta">
+            <span class="survey-detail">🕒 ${s.hora}</span>
+            <span class="survey-detail">⏱️ ${s.duracion}</span>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  } else {
+    cont.innerHTML = '<div class="no-survey">No hay encuestas registradas hoy.</div>';
+  }
+
+  document.getElementById('cortesHoy').textContent = a.dia.cortesCliente || 0;
   
   const txHoy = calcTX(a.dia.derivadas, a.dia.cortes);
   const txMes = calcTX(a.mes.derivadas, a.mes.cortes);
@@ -988,7 +1028,12 @@ function renderDash() {
   }
 
   document.getElementById('medianaVal').textContent = a.medianaTnps !== null ? a.medianaTnps.toFixed(2)+'%' : '—';
-  document.getElementById('gapVal').textContent = a.gapMediana !== null ? (a.gapMediana >= 0 ? '+' : '') + a.gapMediana.toFixed(2)+'%' : '—';
+  
+  const gapEl = document.getElementById('gapVal');
+  if (gapEl) {
+    gapEl.textContent = a.gapMediana !== null ? (a.gapMediana >= 0 ? '+' : '') + a.gapMediana.toFixed(2)+'%' : '—';
+  }
+
   document.getElementById('promMetaVal').textContent = a.promMeta === 0 ? '✓' : (a.promMeta ?? '—');
   document.getElementById('promMedianaVal').textContent = a.promMediana === 0 ? '✓' : (a.promMediana ?? '—');
   renderCuartil(a);
