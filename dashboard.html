@@ -808,6 +808,13 @@ function fetchCSV(url) {
 
 async function inicializarDatos() {
   actualizarTextosCampana();
+  if (!activeCampaign.urlData || activeCampaign.urlData.startsWith('PEGAR_URL_')) {
+    document.getElementById('loginStatus').innerHTML = `⚠️ Ingrese las URLs de Google Sheets para <b>${activeCampaign.nombre}</b> en el script.`;
+    document.getElementById('loginStatus').style.color = 'var(--yellow)';
+    document.getElementById('userInput').disabled = true;
+    document.getElementById('btnBuscar').disabled = true;
+    return;
+  }
   try {
     const [dataAcumulada, distribucion] = await Promise.all([
       fetchCSV(activeCampaign.urlData),
@@ -907,6 +914,8 @@ async function inicializarDatos() {
     document.getElementById('loginStatus').style.color = 'var(--red)';
   }
 }
+
+inicializarDatos();
 
 function tnpsColor(v) {
   if (v === null || isNaN(v)) return 'var(--muted2)';
